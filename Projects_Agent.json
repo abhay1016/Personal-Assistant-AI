@@ -1,0 +1,301 @@
+{
+  "name": "Projects_Agent",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "99c8c779-507e-4dea-99bc-18b66d0b6606",
+      "name": "Execute Workflow Trigger",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1,
+      "position": [
+        -720,
+        120
+      ]
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "17rTnGg9telKLqqWrNlyzngatwyVYUwn9eXkQLBtJ-Ys",
+          "mode": "list",
+          "cachedResultName": "Projects",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/17rTnGg9telKLqqWrNlyzngatwyVYUwn9eXkQLBtJ-Ys/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/17rTnGg9telKLqqWrNlyzngatwyVYUwn9eXkQLBtJ-Ys/edit#gid=0"
+        },
+        "options": {}
+      },
+      "id": "b14ef7e1-2de9-436e-817d-8c1e1a2e0a7b",
+      "name": "Get Projects",
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.5,
+      "position": [
+        -460,
+        340
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "sWjXyJ4hdgHEUmT3",
+          "name": "Google Sheets account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "17rTnGg9telKLqqWrNlyzngatwyVYUwn9eXkQLBtJ-Ys",
+          "mode": "list",
+          "cachedResultName": "Projects",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/17rTnGg9telKLqqWrNlyzngatwyVYUwn9eXkQLBtJ-Ys/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/17rTnGg9telKLqqWrNlyzngatwyVYUwn9eXkQLBtJ-Ys/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Project": "={{ $fromAI(\"project\") }}",
+            "Notes": "={{ $fromAI(\"notes\") }}",
+            "Status": "={{ $fromAI(\"status\") }}"
+          },
+          "matchingColumns": [
+            "Project"
+          ],
+          "schema": [
+            {
+              "id": "Project",
+              "displayName": "Project",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Notes",
+              "displayName": "Notes",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "a0cb5865-4ca0-4180-8092-c51f8ee469a9",
+      "name": "Update Projects",
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.5,
+      "position": [
+        -300,
+        340
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "RvFyUEb798DpSPrh",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "7ab380a2-a8d3-421c-ab4e-748ea8fb7904",
+              "name": "response",
+              "value": "Unable to perform task. Please try again.",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "9a46a2ed-d7d0-417c-985e-ba036d6dec39",
+      "name": "Try Again",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        0,
+        260
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "39c2f302-03be-4464-a17a-d7cc481d6d44",
+              "name": "=response",
+              "value": "={{$json.output}}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "89f4beeb-2725-4744-9558-560464d5ab7c",
+      "name": "Success",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{$json.query}}",
+        "options": {
+          "systemMessage": "=You are a google sheets agent. Your job is to take the user query and decide which tool to use to get the job done. \n\nYour tools:\nAdd Contact\nUse this tool to add a contact to the contact database\n\nUpdate Contact\nUse this tool to update a row for a specific contact. The fields for a contact are Name, Email, and Phone Number. If not all of these are specified to update, then keep them as they are. Example, if we want to update Nate Herk's email, pass along the updated email, but keep the current Name and Phone Number the same. \n\nGet Projects\nUse this tool to get project information and summarize it.\n\nUpdate Projects\nUse this tool to update a row for a specific contact. The fields for a contact are Project, Notes, and Status. If not all of these are specified to update, then keep them as they are. "
+        }
+      },
+      "id": "0cb058ba-782d-442f-be00-386627339323",
+      "name": "Projects Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.6,
+      "position": [
+        -480,
+        120
+      ],
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "model": "llama3-70b-8192",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        -640,
+        360
+      ],
+      "id": "9b44b532-db76-454d-aaf1-2ce7fa208558",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "ycNY7UDWQEppOZcm",
+          "name": "Groq account 2"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "Execute Workflow Trigger": [
+      {
+        "json": {}
+      }
+    ]
+  },
+  "connections": {
+    "Execute Workflow Trigger": {
+      "main": [
+        [
+          {
+            "node": "Projects Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Projects": {
+      "ai_tool": [
+        [
+          {
+            "node": "Projects Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Projects": {
+      "ai_tool": [
+        [
+          {
+            "node": "Projects Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Projects Agent": {
+      "main": [
+        [
+          {
+            "node": "Success",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Try Again",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Projects Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "1fa4c207-1bcb-4f20-af54-c4c55abec253",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "15bcd2784fce9797a4fb8dc04ff847859186590eb4e093a226ab4241628a166c"
+  },
+  "id": "W0OkiiDlu8CtthnV",
+  "tags": []
+}

@@ -1,0 +1,530 @@
+{
+  "name": "__Personal_Assistant_AI_Agent_2_0",
+  "nodes": [
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "C07U1V6UH3Q",
+          "mode": "list",
+          "cachedResultName": "youtubetesting"
+        },
+        "text": "={{ $fromAI(\"message\",\"the message the user wants to send in Slack\") }}",
+        "otherOptions": {
+          "includeLinkToWorkflow": false
+        }
+      },
+      "id": "300a59f5-d4ac-434b-b483-5d2976aa0538",
+      "name": "Send Slack Message",
+      "type": "n8n-nodes-base.slackTool",
+      "typeVersion": 2.2,
+      "position": [
+        720,
+        340
+      ],
+      "webhookId": "5b1c7cae-43cd-43e5-8bcc-0595dd1f97f7",
+      "credentials": {
+        "slackOAuth2Api": {
+          "id": "1hJi1X0uDcjDBrxK",
+          "name": "Slack account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "pineconeIndex": {
+          "__rl": true,
+          "value": "sample",
+          "mode": "list",
+          "cachedResultName": "sample"
+        },
+        "options": {
+          "pineconeNamespace": "demo"
+        }
+      },
+      "id": "41efe86c-4b91-41f7-b191-7690baa1569c",
+      "name": "Pinecone Vector Store",
+      "type": "@n8n/n8n-nodes-langchain.vectorStorePinecone",
+      "typeVersion": 1,
+      "position": [
+        1620,
+        480
+      ],
+      "credentials": {
+        "pineconeApi": {
+          "id": "2OnqgYagBJX3bdsI",
+          "name": "PineconeApi account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "name": "Knowledge_Base",
+        "description": "Call this tool to get information about the company."
+      },
+      "id": "14965571-99be-442a-9227-2aff5ca687d1",
+      "name": "Knowledge Base",
+      "type": "@n8n/n8n-nodes-langchain.toolVectorStore",
+      "typeVersion": 1,
+      "position": [
+        1620,
+        320
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "3598f789-f1b7-40f0-a988-d9cb5ce0291b",
+      "name": "Calculator",
+      "type": "@n8n/n8n-nodes-langchain.toolCalculator",
+      "typeVersion": 1,
+      "position": [
+        1880,
+        320
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        380,
+        340
+      ],
+      "id": "84b3683b-7683-4dd1-a228-f4c076b270f1",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "ycNY7UDWQEppOZcm",
+          "name": "Groq account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        2020,
+        500
+      ],
+      "id": "b279d101-b838-4596-9d69-8859c9f65f57",
+      "name": "Groq Chat Model1",
+      "credentials": {
+        "groqApi": {
+          "id": "ycNY7UDWQEppOZcm",
+          "name": "Groq account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsHuggingFaceInference",
+      "typeVersion": 1,
+      "position": [
+        1720,
+        700
+      ],
+      "id": "d97356b0-b0e1-4fda-be99-63c616329ba4",
+      "name": "Embeddings HuggingFace Inference",
+      "credentials": {
+        "huggingFaceApi": {
+          "id": "XUlHACDyWfBNjpVL",
+          "name": "HuggingFaceApi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "familyName": "n8n",
+        "givenName": "n8n",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.googleContactsTool",
+      "typeVersion": 1,
+      "position": [
+        540,
+        340
+      ],
+      "id": "b8750249-f7e8-465f-b432-9d4091cab1bb",
+      "name": "Google Contacts",
+      "credentials": {
+        "googleContactsOAuth2Api": {
+          "id": "hwbh6ndnWr8vy7un",
+          "name": "Google Contacts account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "name": "Email_Agent",
+        "description": "use this for any email related actions",
+        "workflowId": {
+          "__rl": true,
+          "value": "7TngRL7Juc38QwlE",
+          "mode": "list",
+          "cachedResultName": "Email_Agent"
+        }
+      },
+      "id": "c7e9d18a-059d-4301-b1ac-735f6196af99",
+      "name": "Email_Agent",
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        1040,
+        340
+      ]
+    },
+    {
+      "parameters": {
+        "name": "Calendar_Agent",
+        "description": "use this for any date related actions.",
+        "workflowId": {
+          "__rl": true,
+          "value": "uK8NRPXEOgZFDeeg",
+          "mode": "list",
+          "cachedResultName": "Calendar_Agent"
+        }
+      },
+      "id": "d444d51f-dde0-42ae-bf2d-5d1a32927d41",
+      "name": "Calendar_Agent",
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        1200,
+        340
+      ]
+    },
+    {
+      "parameters": {
+        "name": "Research_Agent",
+        "description": "Call this tool to search through Wikipedia, articles, or google to answer the user's question.",
+        "workflowId": {
+          "__rl": true,
+          "value": "KEpYk5Q7MGD2ztIB",
+          "mode": "list",
+          "cachedResultName": "Research_Agent"
+        }
+      },
+      "id": "5536b6b4-48f7-4744-8bc7-743e2589aeaa",
+      "name": "Research_Agent",
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        1360,
+        340
+      ]
+    },
+    {
+      "parameters": {
+        "name": "Projects_Agent",
+        "description": "Call this tool to take action on our projects.",
+        "workflowId": {
+          "__rl": true,
+          "value": "W0OkiiDlu8CtthnV",
+          "mode": "list",
+          "cachedResultName": "Projects_Agent"
+        },
+        "responsePropertyName": "=response"
+      },
+      "id": "dd3287d9-70d7-45f9-9246-9c605775078c",
+      "name": "Projects_Agent",
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        1520,
+        340
+      ]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "Chat-UI",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        260,
+        60
+      ],
+      "id": "fc8c1107-de7a-4cf2-bda4-d5c23fa3a671",
+      "name": "Webhook",
+      "webhookId": "e58771aa-47aa-49d7-ac55-97379b0fa2f6"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "0d4b506c-b4a4-4016-aab0-b61bd8f1f183",
+              "name": "message",
+              "value": "Blog Post Created",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1380,
+        60
+      ],
+      "id": "db9d07a0-7e99-427c-85ee-491692e51bb2",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{ json: { chatInput: $input.first().json.chatInput } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        500,
+        60
+      ],
+      "id": "11b5cfdf-158e-4c8a-833f-48127b08c1d4",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "01acdd42-b3aa-4c5a-9692-02959b0aede7",
+              "name": "chatinput",
+              "value": "send a email to abhaykrishna03062000@gmail.com for tomorrow bday party.",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        720,
+        60
+      ],
+      "id": "41240310-b593-4021-a638-a89725e11d2f",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.chatinput }}",
+        "options": {
+          "systemMessage": "=You are a highly efficient personal assistant AI Agent designed to assist the user with daily tasks. Your primary role is to manage emails, schedule calendar events, and handle communication efficiently. You have access to the following tools to fulfill requests:\n\nEmail Agent: Use this to send, reply to, or forward emails. Always verify the email address before sending and include the subject and body as provided.\nCalendar Agent: Use this to schedule, update, or manage calendar events with precise timing details.\nContacts Data: Use this to look up contact information (e.g., email addresses) before performing email or communication tasks.\nSlack Agent: Use this to send messages in Slack when requested.\nWhen a task is given, identify the most appropriate tool, extract relevant details (e.g., email address, time, subject), and execute the action promptly. Prioritize accuracy and timeliness, ensuring all actions are completed within the specified timeframe. If details are missing, ask the user for clarification. Your goal is to provide a seamless and proactive experience for the user."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        940,
+        60
+      ],
+      "id": "3f1ade1d-8c9f-4516-9c66-7c200b693a80",
+      "name": "AI Agent"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Send Slack Message": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pinecone Vector Store": {
+      "ai_vectorStore": [
+        [
+          {
+            "node": "Knowledge Base",
+            "type": "ai_vectorStore",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Knowledge Base": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calculator": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Knowledge Base",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings HuggingFace Inference": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Pinecone Vector Store",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Contacts": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Email_Agent": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calendar_Agent": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Research_Agent": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Projects_Agent": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "ed6a4ea0-8bac-4a93-868c-28c78eb78ad0",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "15bcd2784fce9797a4fb8dc04ff847859186590eb4e093a226ab4241628a166c"
+  },
+  "id": "ULnBs0OJlnx8vG2A",
+  "tags": []
+}

@@ -1,0 +1,259 @@
+{
+  "name": "Email_Agent",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "c2413311-313e-4a3e-bb6e-e9890d496bdd",
+      "name": "Execute Workflow Trigger",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1,
+      "position": [
+        -760,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "7ab380a2-a8d3-421c-ab4e-748ea8fb7904",
+              "name": "response",
+              "value": "Unable to perform task. Please try again.",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "62273478-b78c-4f69-8bd9-4bed2ed40904",
+      "name": "Try Again",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        0,
+        260
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "39c2f302-03be-4464-a17a-d7cc481d6d44",
+              "name": "=response",
+              "value": "={{$json.output}}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "25ab3b52-bc31-4136-8d7d-5797b2fcbcfb",
+      "name": "Success",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "{{$json.query}}",
+        "options": {
+          "systemMessage": "=You are a helpful assistant. \n\nIf a number of emails isn't specified, just assume it will be 5.\n\nWhen sending an email, always sign it off from Nate, never include something like [Your Name]"
+        }
+      },
+      "id": "0a91ccb7-02e9-45ee-a9fa-cd0a5cbdd1eb",
+      "name": "Email Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.6,
+      "position": [
+        -540,
+        100
+      ],
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "model": "llama-3.3-70b-versatile",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        -660,
+        340
+      ],
+      "id": "7831d007-f2e4-416d-bdcc-24706266609a",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "g9M5Se3WFoGjP7A2",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "limit": 5,
+        "filters": {
+          "readStatus": "=unread",
+          "sender": "={{$fromAI(\"senderEmail\",\"who the user is asking for emails from\")}}"
+        }
+      },
+      "id": "e0ee1245-c4e5-429c-b02e-2a59cd75599d",
+      "name": "Get Messages",
+      "type": "n8n-nodes-base.gmailTool",
+      "typeVersion": 2.1,
+      "position": [
+        -260,
+        340
+      ],
+      "webhookId": "de4efecc-a8f9-48a1-991f-3a21f40b9f28",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "0mpZZzYydyhPprC4",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "limit": 5,
+        "filters": {
+          "readStatus": "=unread",
+          "sender": "={{$fromAI(\"senderEmail\",\"who the user is asking for emails from\")}}"
+        }
+      },
+      "id": "e0ee1245-c4e5-429c-b02e-2a59cd75599d",
+      "name": "Get Messages",
+      "type": "n8n-nodes-base.gmailTool",
+      "typeVersion": 2.1,
+      "position": [
+        -260,
+        340
+      ],
+      "webhookId": "de4efecc-a8f9-48a1-991f-3a21f40b9f28",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "0mpZZzYydyhPprC4",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('To', ``, 'string') }}",
+        "subject": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Subject', ``, 'string') }}",
+        "message": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Message', ``, 'string') }}",
+        "options": {
+          "appendAttribution": true
+        }
+      },
+      "type": "n8n-nodes-base.gmailTool",
+      "typeVersion": 2.1,
+      "position": [
+        -460,
+        340
+      ],
+      "id": "10077da5-5ee5-4c55-bf02-d122b5f8f992",
+      "name": "Gmail",
+      "webhookId": "570f30bf-d240-4899-a877-c082bac0c69f",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "0mpZZzYydyhPprC4",
+          "name": "Gmail account"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "Execute Workflow Trigger": [
+      {
+        "json": {
+          "query": "send emails to 22ec3001@rgipt.ac.in"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Execute Workflow Trigger": {
+      "main": [
+        [
+          {
+            "node": "Email Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Email Agent": {
+      "main": [
+        [
+          {
+            "node": "Success",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Try Again",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Email Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Messages": {
+      "ai_tool": [
+        [
+          {
+            "node": "Email Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail": {
+      "ai_tool": [
+        [
+          {
+            "node": "Email Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "6a689416-5b38-4327-b760-07bf24044e0c",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "15bcd2784fce9797a4fb8dc04ff847859186590eb4e093a226ab4241628a166c"
+  },
+  "id": "7TngRL7Juc38QwlE",
+  "tags": []
+}
